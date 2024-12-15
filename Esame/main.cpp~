@@ -1,0 +1,83 @@
+/*
+c++ -o test test.cpp casual.cc `root-config --glibs --cflags` 
+./test (Neventi) 
+*/
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <cmath>
+
+#include "TH1F.h"
+#include "TCanvas.h"
+
+//#include "statistiche.h"
+//#include "statistiche_vector.h"
+//#include "funzioni.h"
+#include "casual.h"
+
+using namespace std ;
+
+int main (int argc, char ** argv)
+  {
+
+    if (argc < 2)
+      {
+        cerr << "uso: " << argv[0] << " numero_di_eventi " << endl ;
+        exit (1) ;
+      }
+    double Neventi =atoi (argv[1]);
+
+    //TEST TAC
+
+    //GAUSSIANA TAC
+
+    float x_min = -3;		//Definisco l'intervallo di estrazione [Xmin,Xmax]
+    float x_max = 3;
+
+    TH1F h_gaussTAC ("h_gaussTAC", "GAUSS_TAC", 100 , x_min, x_max) ;
+
+    for(int i=0; i < Neventi  ; ++i){
+      h_gaussTAC.Fill (rand_TAC(fgaus, x_min, x_max, 10));		
+    }
+
+    TCanvas c1 ;
+    h_gaussTAC.Draw () ;
+    c1.Print ("h_gaussTAC.png", "png") ;
+
+    //GAUSSIANA TAC GIUSTA
+
+    float media = 0;	        
+    float sigma = 2;
+
+    TH1F h_gaussTACseria ("h_gaussTACseria", "GAUSS_TACseria", 100 , media-4*sigma, media+4*sigma) ;
+
+    for(int i=0; i < Neventi  ; ++i){
+      h_gaussTACseria.Fill (rand_TAC_gaus(media,sigma));		
+    }
+
+    TCanvas c3 ;
+    h_gaussTACseria.Draw () ;
+    c3.Print ("h_gaussTACseria.png", "png") ;
+    
+
+    //TEST TEOREMA CENTRALE LIMITE
+
+    float media_vera = 0;	        
+    float sigma_vero = 2;
+
+    TH1F h_gaussTCL ("h_gaussTCL", "GAUSS_TCL", 100 , media_vera-4*sigma_vero, media_vera+4*sigma_vero) ;
+
+    for(int i=0; i < Neventi  ; ++i){
+      h_gaussTCL.Fill (rand_TCL_gaus(media_vera, sigma_vero, Neventi));		
+    }
+
+    TCanvas c2 ;
+    h_gaussTCL.Draw () ;
+    c2.Print ("h_gaussTCL.png", "png") ;
+
+
+  return 0 ;
+}
+
+  
