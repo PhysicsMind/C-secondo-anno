@@ -1,0 +1,20 @@
+#ifndef casual_h
+#define casual_h
+
+//FUNZIONI per TAC
+
+
+
+//RANDOM CLASSICO
+
+double random_range (double min, double max) ;
+
+float rand_exp (double t_zero) ;
+
+float rand_pois (double media) ;
+
+//RANDOM TAC (Try and Catch)
+
+float rand_TAC (float f (float), float xMin, float xMax, float yMax);
+
+#endif
